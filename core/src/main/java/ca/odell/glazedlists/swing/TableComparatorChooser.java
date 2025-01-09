@@ -4,6 +4,7 @@
 package ca.odell.glazedlists.swing;
 
 import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.SortableEventList;
 import ca.odell.glazedlists.SortedList;
 import ca.odell.glazedlists.gui.AbstractTableComparatorChooser;
 import ca.odell.glazedlists.gui.AdvancedTableFormat;
@@ -97,7 +98,7 @@ public class TableComparatorChooser<E> extends AbstractTableComparatorChooser<E>
      * performed and fixes an API flaw by explicitly requiring the TableFormat.
      */
     @Deprecated
-    public TableComparatorChooser(JTable table, SortedList<E> sortedList, boolean multipleColumnSort) {
+    public TableComparatorChooser(JTable table, SortableEventList<E> sortedList, boolean multipleColumnSort) {
         this(table, sortedList, multipleColumnSort ? MULTIPLE_COLUMN_MOUSE : SINGLE_COLUMN);
     }
 
@@ -109,7 +110,7 @@ public class TableComparatorChooser<E> extends AbstractTableComparatorChooser<E>
      * performed and fixes an API flaw by explicitly requiring the TableFormat.
      */
     @Deprecated
-    public TableComparatorChooser(JTable table, SortedList<E> sortedList, Object strategy) {
+    public TableComparatorChooser(JTable table, SortableEventList<E> sortedList, Object strategy) {
         this(table, sortedList,strategy,((AdvancedTableModel<E>)table.getModel()).getTableFormat());
     }
 
@@ -126,7 +127,7 @@ public class TableComparatorChooser<E> extends AbstractTableComparatorChooser<E>
      *          <li> {@link ca.odell.glazedlists.gui.AbstractTableComparatorChooser#MULTIPLE_COLUMN_MOUSE_WITH_UNDO}
      * @param tableFormat the TableFormat providing the columns for the table
      */
-    protected TableComparatorChooser(JTable table, SortedList<E> sortedList, Object strategy, TableFormat<? super E> tableFormat) {
+    protected TableComparatorChooser(JTable table, SortableEventList<E> sortedList, Object strategy, TableFormat<? super E> tableFormat) {
         super(sortedList, tableFormat);
         validateSortingStrategy(strategy);
 
@@ -190,7 +191,7 @@ public class TableComparatorChooser<E> extends AbstractTableComparatorChooser<E>
      * @return TableComparatorChooser object that is responsible for translating
      *      mouse clicks on the table header into sorting actions on the sortedList.
      */
-    public static <E> TableComparatorChooser<E> install(JTable table, SortedList<E> sortedList, Object strategy) {
+    public static <E> TableComparatorChooser<E> install(JTable table, SortableEventList<E> sortedList, Object strategy) {
         return install(table, sortedList, strategy, ((AdvancedTableModel<E>)table.getModel()).getTableFormat());
     }
 
@@ -223,7 +224,7 @@ public class TableComparatorChooser<E> extends AbstractTableComparatorChooser<E>
      * @return TableComparatorChooser object that is responsible for translating
      *      mouse clicks on the table header into sorting actions on the sortedList.
      */
-    public static <E> TableComparatorChooser<E> install(JTable table, SortedList<E> sortedList, Object strategy, TableFormat<? super E> tableFormat) {
+    public static <E> TableComparatorChooser<E> install(JTable table, SortableEventList<E> sortedList, Object strategy, TableFormat<? super E> tableFormat) {
         return new TableComparatorChooser<>(table, sortedList, strategy, tableFormat);
     }
 

@@ -3,7 +3,7 @@
 /*                                                     O'Dell Engineering Ltd.*/
 package ca.odell.glazedlists.gui;
 
-import ca.odell.glazedlists.SortedList;
+import ca.odell.glazedlists.SortableEventList;
 import ca.odell.glazedlists.impl.gui.MouseKeyboardSortingStrategy;
 import ca.odell.glazedlists.impl.gui.MouseOnlySortingStrategy;
 import ca.odell.glazedlists.impl.gui.SortingState;
@@ -100,7 +100,7 @@ public abstract class AbstractTableComparatorChooser<E> {
     public static final Object MULTIPLE_COLUMN_KEYBOARD = new MouseKeyboardSortingStrategy();
 
     /** the sorted list to choose the comparators for */
-    protected SortedList<E> sortedList;
+    protected SortableEventList<E> sortedList;
 
     /** the columns to sort over */
     private TableFormat<? super E> tableFormat;
@@ -113,9 +113,9 @@ public abstract class AbstractTableComparatorChooser<E> {
 
     /**
      * Create a {@link AbstractTableComparatorChooser} that sorts the specified
-     * {@link SortedList} over the specified columns.
+     * {@link SortableEventList} over the specified columns.
      */
-    protected AbstractTableComparatorChooser(SortedList<E> sortedList, TableFormat<? super E> tableFormat) {
+    protected AbstractTableComparatorChooser(SortableEventList<E> sortedList, TableFormat<? super E> tableFormat) {
         this.sortedList = sortedList;
         this.sortingState = createSortingState();
         this.setTableFormat(tableFormat);
@@ -133,7 +133,7 @@ public abstract class AbstractTableComparatorChooser<E> {
 
     /**
      * Handle changes to the sorting state by applying the new comparator
-     * to the {@link SortedList}.
+     * to the {@link SortableEventList}.
      */
     private class SortingStateListener implements PropertyChangeListener {
         @Override
@@ -210,7 +210,7 @@ public abstract class AbstractTableComparatorChooser<E> {
     /**
      * Append the comparator specified by the column, comparator index and reverse
      * parameters to the end of the sequence of comparators this
-     * {@link AbstractTableComparatorChooser} is sorting the {@link SortedList}
+     * {@link AbstractTableComparatorChooser} is sorting the {@link SortableEventList}
      * by.
      *
      * <p><i>Append</i> implies that if this {@link AbstractTableComparatorChooser}
@@ -238,7 +238,7 @@ public abstract class AbstractTableComparatorChooser<E> {
     }
 
     /**
-     * Clear all sorting state and set the {@link SortedList} to use its
+     * Clear all sorting state and set the {@link SortableEventList} to use its
      * natural order.
      */
     public void clearComparator() {

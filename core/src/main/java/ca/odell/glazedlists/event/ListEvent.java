@@ -4,7 +4,7 @@
 package ca.odell.glazedlists.event;
 
 import ca.odell.glazedlists.EventList;
-import ca.odell.glazedlists.SortedList;
+import ca.odell.glazedlists.SortableEventList;
 import ca.odell.glazedlists.TransformedList;
 
 import java.util.EventObject;
@@ -144,7 +144,7 @@ import java.util.EventObject;
  * <p>
  * There is a special kind of change, a {@link #isReordering() reordering}
  * ListEvent. It indicates a reordering of the list elements, for example
- * triggered by setting a new comparator on a {@link SortedList}.
+ * triggered by setting a new comparator on a {@link SortableEventList}.
  *
  * <p>
  * A reorder event cannot contain other regular changes in the current implementation.

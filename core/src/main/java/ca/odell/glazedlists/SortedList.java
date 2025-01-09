@@ -52,7 +52,7 @@ import java.util.*;
  *
  * @author <a href="mailto:jesse@swank.ca">Jesse Wilson</a>
  */
-public final class SortedList<E> extends TransformedList<E,E> {
+public final class SortedList<E> extends TransformedList<E,E> implements SortableEventList<E> {
 
     private static final byte ALL_COLORS = 1;
     private static final Element EMPTY_ELEMENT = null;
@@ -409,6 +409,7 @@ public final class SortedList<E> extends TransformedList<E,E> {
      *      elements in natural order, then a ComparableComparator} will
      *      be returned.
      */
+    @Override
     public Comparator<? super E> getComparator() {
         return comparator;
     }
@@ -429,6 +430,7 @@ public final class SortedList<E> extends TransformedList<E,E> {
      *      in their natural order. You may also specify <code>null</code> to put
      *      this {@link SortedList} in unsorted order.
      */
+    @Override
     public void setComparator(Comparator<? super E> comparator) {
         // save this comparator
         this.comparator = comparator;
