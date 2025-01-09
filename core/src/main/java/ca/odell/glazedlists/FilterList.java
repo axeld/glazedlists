@@ -50,6 +50,25 @@ import ca.odell.glazedlists.matchers.Matchers;
  */
 public final class FilterList<E> extends TransformedList<E,E> {
 
+    /**
+     * Filtering mode where the elements are always filtered directly upon changes.
+     */
+    public static final int STRICT_FILTERING = 0;
+
+    /**
+     * Filtering mode where elements aren't filtered out when their value is changed,
+     * and will also show new elements, unless the filter is changed. This mode
+     * is useful in editable lists and tables because it is annoying
+     * for the current element to hide if its value changes.
+     */
+    public static final int AVOID_CHANGES = 1;
+
+    /**
+     * Filtering mode where elements aren't filtered out when their value is changed.
+     * However, unlike {@link #AVOID_CHANGES}, new elements are filtered as usual.
+     */
+    public static final int AVOID_CHANGES_FILTER_NEW = 2;
+
     /** the flag list contains Barcode.BLACK for items that match the current filter and Barcode.WHITE for others */
     private Barcode flagList = new Barcode();
 
@@ -64,6 +83,9 @@ public final class FilterList<E> extends TransformedList<E,E> {
 
     /** is this list already disposed? */
     private volatile boolean disposed;
+
+    /** one of {@link #STRICT_FILTERING} or {@link #AVOID_CHANGES}. */
+    private int mode;
 
     /**
      * Creates a {@link FilterList} that includes a subset of the specified
@@ -107,6 +129,36 @@ public final class FilterList<E> extends TransformedList<E,E> {
         currentEditor.addMatcherEditorListener(listener);
         currentMatcher = currentEditor.getMatcher();
         changed();
+    }
+
+    /**
+     * Modify the behaviour of this {@link FilterList} to one of the predefined modes.
+     *
+     * @param mode either {@link #STRICT_FILTERING} or {@link #AVOID_CHANGES}.
+     */
+    public void setMode(int mode) {
+        if (mode != STRICT_FILTERING && mode != AVOID_CHANGES && mode != AVOID_CHANGES_FILTER_NEW)
+            throw new IllegalArgumentException("Mode must be either FilterList.STRICT_FILTERING, FilterList.AVOID_CHANGES, or FilterList.AVOID_CHANGES_FILTER_NEW");
+        if (mode == this.mode)
+            return;
+
+        // apply the new mode
+        this.mode = mode;
+
+        // we need to re-filter the table on the off-chance that an element
+        // was shown that will now be hidden
+        if (this.mode == STRICT_FILTERING && !disposed)
+            changed();
+    }
+
+    /**
+     * Get the behaviour mode for this {@link FilterList}.
+     *
+     * @return one of {@link #STRICT_FILTERING} (default), {@link #AVOID_CHANGES}, or
+     * {@link #AVOID_CHANGES_FILTER_NEW}.
+     */
+    public int getMode() {
+        return this.mode;
     }
 
     /**
@@ -219,7 +271,8 @@ public final class FilterList<E> extends TransformedList<E,E> {
 
                     // whether we should add this item
                     E element = source.get(sourceIndex);
-                    boolean include = currentMatcher.matches(element);
+                    boolean include = mode == AVOID_CHANGES
+                            || currentMatcher.matches(element);
 
                     // if this value should be included, add a change and add the item
                     if(include) {
@@ -240,7 +293,9 @@ public final class FilterList<E> extends TransformedList<E,E> {
                     boolean wasIncluded = filteredIndex != -1;
                     // whether we should add this item
                     E updated = source.get(sourceIndex);
-                    boolean include = currentMatcher.matches(updated);
+                    boolean include = wasIncluded
+                            && (mode == AVOID_CHANGES || mode == AVOID_CHANGES_FILTER_NEW)
+                            || currentMatcher.matches(updated);
 
                     // if this element is being removed as a result of the change
                     if(wasIncluded && !include) {
