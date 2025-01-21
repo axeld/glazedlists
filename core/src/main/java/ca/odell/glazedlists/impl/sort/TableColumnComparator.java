@@ -40,6 +40,10 @@ public class TableColumnComparator<E> implements Comparator<E> {
         this.comparator = comparator;
     }
 
+    public Comparator getComparator() {
+        return comparator;
+    }
+
     /**
      * Compares the two objects, returning a result based on how they compare.
      */
