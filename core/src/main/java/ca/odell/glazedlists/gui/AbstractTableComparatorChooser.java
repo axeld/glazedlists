@@ -179,6 +179,14 @@ public abstract class AbstractTableComparatorChooser<E> {
         return sortingState.getColumns().get(column).getComparators();
     }
 
+    public SortableEventList<E> getSortedList() {
+        return sortedList;
+    }
+
+    public SortingState getSortingState() {
+        return sortingState;
+    }
+
     /**
      * Get the columns that the TableComparatorChooser is sorting by.
      *
