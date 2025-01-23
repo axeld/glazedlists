@@ -344,11 +344,8 @@ public class TableComparatorChooser<E> extends AbstractTableComparatorChooser<E>
      * take place, rather than a change in sort.
      */
     protected boolean isSortingMouseEvent(MouseEvent e) {
-        // skip the sort if it's not button 1
-        if(e.getButton() != MouseEvent.BUTTON1) return false;
-
-        // we have no reason to dislike this mouse event!
-        return true;
+        // skip the sort if it's not button 1 or if the event is consumed
+        return !e.isConsumed() && e.getButton() == MouseEvent.BUTTON1;
     }
 
     /**
